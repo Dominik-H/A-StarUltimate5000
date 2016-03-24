@@ -17,20 +17,23 @@ namespace DHAlgos {
 		bool isDead() const;
 		void kill();
 
+		virtual bool isIt() const = 0;
+		virtual bool compare(Node *a, Node *b) const = 0;
+
 		/* 
 		* Attention Please!!
-		* Please properly delete output vector to avoid memory leaks.
+		* Make sure to properly delete output vector to avoid memory leaks.
 		*/
 		std::vector<Node *> *getPathToStart() const;
 
+		std::vector<Node *> kids;
+		virtual void generateKids() = 0;
+
 	protected:
 		Node *parent;
-		std::vector<Node *> kids;
 
 	private:
 		bool dead;
-
-		virtual void generateKids() = 0;
 	};
 
 }

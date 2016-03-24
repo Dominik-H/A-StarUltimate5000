@@ -6,8 +6,6 @@ Node::Node(Node *parent)
 {
 	this->parent = parent;
 	dead = false;
-
-	generateKids();
 }
 
 
