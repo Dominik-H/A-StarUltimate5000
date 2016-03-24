@@ -89,9 +89,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="A_Star_App.h" />
+    <ClInclude Include="Field.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Node.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="A_Star_App.cpp" />
+    <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
