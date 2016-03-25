@@ -1,5 +1,6 @@
 #include "BestFirstSearch.h"
 #include <algorithm>
+#include <functional>
 
 using namespace DHAlgos;
 typedef unsigned int uint32;
@@ -24,6 +25,8 @@ Node *BestFirstSearch::search()
 			return working;
 		}
 
+		debug.push_back(working);
+
 		findDoubleInClose(working);
 		
 		working->generateKids();
@@ -31,7 +34,7 @@ Node *BestFirstSearch::search()
 			insertIntoOpen(working->kids[i]);
 		}
 
-		std::sort(OPEN.begin(), OPEN.end(), Node::compare);
+		std::sort(OPEN.begin(), OPEN.end(), DHAlgos::Helper::comparator);
 	}
 
 	return nullptr;
@@ -39,7 +42,7 @@ Node *BestFirstSearch::search()
 
 const std::vector<Node *> &BestFirstSearch::getDebugData()
 {
-	return CLOSE;
+	return debug;
 }
 
 void BestFirstSearch::findDoubleInClose(Node *in)

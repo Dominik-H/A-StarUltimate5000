@@ -93,6 +93,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="A_Star_App.cpp" />
@@ -100,6 +101,9 @@
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Node.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

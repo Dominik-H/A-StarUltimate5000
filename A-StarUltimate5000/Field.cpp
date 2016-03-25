@@ -1,24 +1,37 @@
 #include "Field.h"
 #include <algorithm>
+#include <functional>
 
 using namespace DHAStar5000;
 
 Field::Field(Field *parent, Map *map, int x, int y)
 	:Node(parent)
 {
-	this->map = map;
-	this->x = x;
-	this->y = y;
+	if (parent == nullptr) {
+		this->map = map;
+		map->getStart(this->x, this->y);
+	}
+	else {
+		this->map = map;
+		this->x = x;
+		this->y = y;
+	}
 }
 
 
 Field::~Field()
 {
 	for (auto i = kids.begin(); i != kids.end(); ++i) {
+		(*i)->deleteKids();
 		delete (*i);
 	}
 
 	kids.clear();
+}
+
+void Field::deleteKids()
+{
+	Node::deleteKids();
 }
 
 bool Field::isIt() const
@@ -29,7 +42,7 @@ bool Field::isIt() const
 	return (Fx == x && Fy == y);
 }
 
-bool Field::compare(Node *a, Node *b) const
+bool DHAlgos::Helper::comparator(Node *a, Node *b)
 {
 	return a->getTotalPrice() < b->getTotalPrice();
 }
@@ -44,54 +57,74 @@ void Field::generateKids()
 	bool down = false;
 
 	if (x > 0) {
-		tmp = new Field(this, map, x - 1, y);
-		kids.push_back(tmp);
-
-		if (y > 0) {
-			tmp = new Field(this, map, x - 1, y - 1);
-			kids.push_back(tmp);
-
-			tmp = new Field(this, map, x, y - 1);
-			up = true;
+		if (map->getFieldType(x - 1, y) != FieldType::WALL) {
+			tmp = new Field(this, map, x - 1, y);
 			kids.push_back(tmp);
 		}
 
-		if (y < (m_height - 1)) {
-			tmp = new Field(this, map, x - 1, y + 1);
-			kids.push_back(tmp);
+		if (y > 0) {
+			if (map->getFieldType(x - 1, y - 1) != FieldType::WALL) {
+				tmp = new Field(this, map, x - 1, y - 1);
+				kids.push_back(tmp);
+			}
 
-			tmp = new Field(this, map, x, y + 1);
-			down = true;
-			kids.push_back(tmp);
+			if (map->getFieldType(x, y - 1) != FieldType::WALL) {
+				tmp = new Field(this, map, x, y - 1);
+				up = true;
+				kids.push_back(tmp);
+			}
+		}
+
+		if (y < (m_height - 1)) {
+			if (map->getFieldType(x - 1, y + 1) != FieldType::WALL) {
+				tmp = new Field(this, map, x - 1, y + 1);
+				kids.push_back(tmp);
+			}
+
+			if (map->getFieldType(x, y + 1) != FieldType::WALL) {
+				tmp = new Field(this, map, x, y + 1);
+				down = true;
+				kids.push_back(tmp);
+			}
 		}
 	}
 
 	if (x < (m_width - 1)) {
-		tmp = new Field(this, map, x + 1, y);
-		kids.push_back(tmp);
+		if (map->getFieldType(x + 1, y) != FieldType::WALL) {
+			tmp = new Field(this, map, x + 1, y);
+			kids.push_back(tmp);
+		}
 
 		if (y > 0) {
-			tmp = new Field(this, map, x + 1, y - 1);
-			kids.push_back(tmp);
-
-			if (!up) {
-				tmp = new Field(this, map, x, y - 1);
+			if (map->getFieldType(x + 1, y - 1) != FieldType::WALL) {
+				tmp = new Field(this, map, x + 1, y - 1);
 				kids.push_back(tmp);
+			}
+
+			if (map->getFieldType(x, y - 1) != FieldType::WALL) {
+				if (!up) {
+					tmp = new Field(this, map, x, y - 1);
+					kids.push_back(tmp);
+				}
 			}
 		}
 
 		if (y < (m_height - 1)) {
-			tmp = new Field(this, map, x + 1, y + 1);
-			kids.push_back(tmp);
-
-			if (!down) {
-				tmp = new Field(this, map, x, y + 1);
+			if (map->getFieldType(x + 1, y + 1) != FieldType::WALL) {
+				tmp = new Field(this, map, x + 1, y + 1);
 				kids.push_back(tmp);
+			}
+
+			if (map->getFieldType(x, y + 1) != FieldType::WALL) {
+				if (!down) {
+					tmp = new Field(this, map, x, y + 1);
+					kids.push_back(tmp);
+				}
 			}
 		}
 	}
 
-	std::sort(kids.begin(), kids.end(), compare);
+	std::sort(kids.begin(), kids.end(), DHAlgos::Helper::comparator);
 }
 
 float Field::getHeuristic()
@@ -100,7 +133,7 @@ float Field::getHeuristic()
 	int Fy;
 	map->getFinish(Fx, Fy);
 
-	return (abs(Fx - x) + abs(Fy - y)) * 10;
+	return (float)((abs(Fx - x) + abs(Fy - y)) * 10);
 }
 
 float Field::getNodePrice()

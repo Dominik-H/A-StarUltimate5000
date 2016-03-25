@@ -20,11 +20,11 @@ namespace DHAStar5000 {
 		Map(std::string filename);
 		~Map();
 
-		FieldType getFieldType(const int x, const int y) const;
+		FieldType getFieldType(const uint32 x, const uint32 y) const;
 		void getStart(int &x, int &y) const;
 		void getFinish(int &x, int &y) const;
-		int getHeight() const;
-		int getWidth() const;
+		uint32 getHeight() const;
+		uint32 getWidth() const;
 
 	private:
 		std::vector<std::vector<char>> map;

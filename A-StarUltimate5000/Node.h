@@ -8,6 +8,7 @@ namespace DHAlgos {
 	public:
 		Node(Node *parent);
 		virtual ~Node();
+		virtual void deleteKids();
 
 		virtual float getHeuristic() = 0;
 		virtual float getNodePrice() = 0;
@@ -18,7 +19,6 @@ namespace DHAlgos {
 		void kill();
 
 		virtual bool isIt() const = 0;
-		virtual bool compare(Node *a, Node *b) const = 0;
 
 		/* 
 		* Attention Please!!
@@ -36,4 +36,8 @@ namespace DHAlgos {
 		bool dead;
 	};
 
+	class Helper {
+	public:
+		static bool comparator(Node *a, Node *b);
+	};
 }

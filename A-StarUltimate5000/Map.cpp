@@ -11,7 +11,7 @@ Map::Map(std::string filename)
 
 	if (file.is_open()) {
 		std::string s_width, s_height;
-		int width, height;
+		uint32 width, height;
 		std::getline(file, s_width);
 		std::getline(file, s_height);
 
@@ -29,6 +29,7 @@ Map::Map(std::string filename)
 			}
 
 			map.push_back(map_line);
+			map_line.clear();
 		}
 
 		file.close();
@@ -38,9 +39,13 @@ Map::Map(std::string filename)
 
 Map::~Map()
 {
+	for (uint32 i = 0; i < map.size(); ++i) {
+		map[i].clear();
+	}
+	map.clear();
 }
 
-FieldType Map::getFieldType(const int x, const int y) const
+FieldType Map::getFieldType(const uint32 x, const uint32 y) const
 {
 	if (x >= getWidth() || y >= getHeight()) {
 		return OoB;
@@ -88,16 +93,16 @@ void Map::getFinish(int &x, int &y) const
 	}
 }
 
-int Map::getHeight() const
-{
-	return map.size();
-}
-
-int Map::getWidth() const
+uint32 Map::getHeight() const
 {
 	if (!map.empty()) {
 		return map[0].size();
 	}
 
 	return 0;
+}
+
+uint32 Map::getWidth() const
+{
+	return map.size();	
 }

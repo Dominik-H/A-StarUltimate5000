@@ -8,9 +8,19 @@ Node::Node(Node *parent)
 	dead = false;
 }
 
-
 Node::~Node()
 {
+	deleteKids();
+}
+
+void Node::deleteKids()
+{
+	for (auto i = kids.begin(); i != kids.end(); ++i) {
+		(*i)->deleteKids();
+		delete (*i);
+	}
+
+	kids.clear();
 }
 
 std::vector<Node *> *Node::getPathToStart() const

@@ -16,6 +16,8 @@ namespace DHAlgos {
 		std::vector<Node *> OPEN;
 		std::vector<Node *> CLOSE;
 
+		std::vector<Node *> debug;
+
 		void findDoubleInClose(Node *in);
 		void insertIntoOpen(Node *in);
 	};
