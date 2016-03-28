@@ -1,6 +1,5 @@
 ﻿#include "A_Star_App.h"
 
-
 A_Star_App::A_Star_App()
 {
 }
@@ -62,6 +61,19 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 
 void MainFrame::OnFile(wxCommandEvent& event)
 {
+	if (loaded) {
+		if (path) {
+			path->clear();
+			delete path;
+		}
+
+		delete search;
+		start->deleteKids();
+		delete start;
+		delete map;
+		loaded = false;
+	}
+
 	wxFileDialog *openFileDialog = new wxFileDialog(this);
 
 	if (openFileDialog->ShowModal() == wxID_OK) {
@@ -82,9 +94,9 @@ void MainFrame::OnRun(wxCommandEvent& event)
 {
 	if (loaded) {
 		wxClientDC dc(panel);
-		/*dc.SetPen(wxPen(wxColour(35, 35, 35)));
-		dc.SetBrush(wxBrush(wxColour(35, 35, 35)));
-		dc.DrawRectangle(10, 10, 425, 280);*/
+		dc.SetPen(wxPen(wxColour(53, 53, 53)));
+		dc.SetBrush(wxBrush(wxColour(53, 53, 53)));
+		dc.DrawRectangle(10, 10, 425, 280);
 
 		debugText->SetDefaultStyle(wxTextAttr(*wxGREEN));
 
@@ -101,20 +113,20 @@ void MainFrame::OnRun(wxCommandEvent& event)
 		std::vector<DHAlgos::Node *> debug = search->getDebugData();
 		for (uint32 i = 0; i < debug.size(); ++i) {
 			wxString out = wxT("X: ");
-			int dimension = dynamic_cast<DHAStar5000::Field *>(debug.at(i))->getX();
+			int dimension = dynamic_cast<DHAStar5000::Field *>(debug.at(i))->getY();
 			out += wxString::Format(wxT("%d"), dimension);
 			out += wxT(" Y: ");
-			dimension = dynamic_cast<DHAStar5000::Field *>(debug.at(i))->getY();
+			dimension = dynamic_cast<DHAStar5000::Field *>(debug.at(i))->getX();
 			out += wxString::Format(wxT("%d"), dimension);
 			out += wxT("\n");
 			debugText->AppendText(out);
 		}
 
 		wxString out = wxT("X: ");
-		int dimension = finish->getX();
+		int dimension = finish->getY();
 		out += wxString::Format(wxT("%d"), dimension);
 		out += wxT(" Y: ");
-		dimension = finish->getY();
+		dimension = finish->getX();
 		out += wxString::Format(wxT("%d"), dimension);
 		out += wxT("\n");
 		debugText->AppendText(out);
@@ -153,8 +165,8 @@ void MainFrame::OnRun(wxCommandEvent& event)
 		dc.SetBrush(wxBrush(*wxGREEN));
 
 		for (uint32 i = 1; i < path->size(); ++i) {
-			uint32 x = dynamic_cast<DHAStar5000::Field *>(path->at(i))->getX() - 1;
-			uint32 y = dynamic_cast<DHAStar5000::Field *>(path->at(i))->getY() - 1;
+			uint32 x = dynamic_cast<DHAStar5000::Field *>(path->at(i))->getY();
+			uint32 y = dynamic_cast<DHAStar5000::Field *>(path->at(i))->getX();
 
 			dc.DrawRectangle(10 + (x * (w + 1)), 10 + (y * (h + 1)), w, h);
 		}

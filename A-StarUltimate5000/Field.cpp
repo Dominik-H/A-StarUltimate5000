@@ -44,7 +44,7 @@ bool Field::isIt() const
 
 bool DHAlgos::Helper::comparator(Node *a, Node *b)
 {
-	return a->getTotalPrice() < b->getTotalPrice();
+	return ((a->getNodePrice()) < (b->getNodePrice()));
 }
 
 void Field::generateKids()
@@ -145,10 +145,10 @@ float Field::getNodePrice()
 	Field *p = dynamic_cast<Field *>(parent);
 
 	if (p->x != x && p->y != y) {
-		return p->getNodePrice() + 14;
+		return (p->getNodePrice() + 14);
 	}
 
-	return p->getNodePrice() + 10;
+	return (p->getNodePrice() + 10);
 }
 
 float Field::getTotalPrice()
@@ -156,9 +156,18 @@ float Field::getTotalPrice()
 	return getNodePrice() + getHeuristic();
 }
 
-bool Field::operator==(const Node &other) const
+/*bool operator==(const DHAlgos::Node *a, const DHAlgos::Node *b)
 {
-	if (x == dynamic_cast<const Field&>(other).x && y == dynamic_cast<const Field&>(other).y) {
+	if (dynamic_cast<const Field&>(a).getX() == dynamic_cast<const Field&>(b).getX() && dynamic_cast<const Field&>(a).getY() == dynamic_cast<const Field&>(b).getY()) {
+		return true;
+	}
+
+	return false;
+}*/
+
+bool DHAlgos::Helper::same(const Node *a, const Node *b)
+{
+	if (dynamic_cast<const Field *>(a)->getX() == dynamic_cast<const Field *>(b)->getX() && dynamic_cast<const Field *>(a)->getY() == dynamic_cast<const Field *>(b)->getY()) {
 		return true;
 	}
 

@@ -13,7 +13,6 @@ namespace DHAlgos {
 		virtual float getHeuristic() = 0;
 		virtual float getNodePrice() = 0;
 		virtual float getTotalPrice() = 0;
-		virtual bool operator==(const Node &other) const = 0;
 
 		bool isDead() const;
 		void kill();
@@ -39,5 +38,6 @@ namespace DHAlgos {
 	class Helper {
 	public:
 		static bool comparator(Node *a, Node *b);
+		static bool same(const Node *a, const Node *b);
 	};
 }

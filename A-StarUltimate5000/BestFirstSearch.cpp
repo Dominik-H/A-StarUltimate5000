@@ -31,6 +31,10 @@ Node *BestFirstSearch::search()
 		
 		working->generateKids();
 		for (uint32 i = 0; i < working->kids.size(); ++i) {
+			if (working->kids[i]->isDead()) {
+				continue;
+			}
+
 			insertIntoOpen(working->kids[i]);
 		}
 
@@ -49,11 +53,11 @@ void BestFirstSearch::findDoubleInClose(Node *in)
 {
 	in->kill();
 	for (uint32 i = 0; i < CLOSE.size(); ++i) {
-		if (in == CLOSE[i]) {
-			if (in->getTotalPrice() < CLOSE[i]->getTotalPrice()) {
+		if (Helper::same(in, CLOSE[i])) {
+			if (in->getNodePrice() < CLOSE[i]->getNodePrice()) {
 				CLOSE[i] = in;
-				return;
 			}
+			return;
 		}
 	}
 
@@ -62,11 +66,11 @@ void BestFirstSearch::findDoubleInClose(Node *in)
 
 void BestFirstSearch::insertIntoOpen(Node *in) {
 	for (uint32 i = 0; i < OPEN.size(); ++i) {
-		if (in == OPEN[i]) {
-			if (in->getTotalPrice() < OPEN[i]->getTotalPrice()) {
+		if (Helper::same(in, OPEN[i])) {
+			if (in->getNodePrice() < OPEN[i]->getNodePrice()) {
 				OPEN[i] = in;
-				return;
 			}
+			return;
 		}
 	}
 

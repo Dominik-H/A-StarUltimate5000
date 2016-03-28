@@ -15,14 +15,13 @@ namespace DHAStar5000 {
 		virtual float getHeuristic();
 		virtual float getNodePrice();
 		virtual float getTotalPrice();
-		virtual bool operator==(const Node &other) const;
 
 		virtual void generateKids();
 
 		virtual bool isIt() const;
 
-		int getX() const { return y + 1; }
-		int getY() const { return x + 1; }
+		int getX() const { return x; }
+		int getY() const { return y; }
 
 	private:
 		int x, y;
