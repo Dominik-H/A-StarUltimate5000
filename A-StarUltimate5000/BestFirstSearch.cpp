@@ -74,5 +74,11 @@ void BestFirstSearch::insertIntoOpen(Node *in) {
 		}
 	}
 
+	for (uint32 j = 0; j < CLOSE.size(); ++j) {
+		if (Helper::same(in, CLOSE[j])) {
+			return;
+		}
+	}
+
 	OPEN.push_back(in);
 }
